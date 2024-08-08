@@ -1,6 +1,7 @@
 ---
 - name: Writing a test playbook
   hosts: all
+  gather_facts: yes
   become: yes
   tasks:
     - name: Task1
