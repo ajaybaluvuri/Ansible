@@ -10,5 +10,3 @@
       shell: df -h
     - name: Task3
       shell: pwd
-    - name: Task3
-      shell: ll
