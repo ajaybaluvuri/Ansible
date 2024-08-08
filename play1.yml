@@ -1,0 +1,11 @@
+---
+- name: Writing a test playbook
+  hosts: all
+  become: yes
+  tasks:
+    - name: Task1
+      shell: sudo apt update
+    - name: Task2
+      shell: df -h
+    - name: Task3
+      shell: pwd
