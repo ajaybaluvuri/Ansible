@@ -1,7 +1,6 @@
 ---
 - name: Writing a test playbook
   hosts: all
-  remote_user: ubuntu
   gather_facts: yes
   become: yes
   tasks:
