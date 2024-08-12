@@ -14,18 +14,19 @@
  
   tasks:
     - name: Run AWS CLI command to create EC2 instance
-      ansible.builtin.shell: |
-        aws ec2 run-instances \
-          --region {{ region }} \
-          --instance-type {{ instance_type }} \
-          --image-id {{ ami_id }} \
-          --key-name {{ key_name }} \
-          --security-group-ids {{ security_group }} \
-          --subnet-id {{ subnet_id }} \
-          --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value={{ tag_name }}}]' \
-          --query 'Instances[0].InstanceId' \
-          --output text
-      register: ec2_instance_id
+      ansible.builtin.shell:
+        cmd: |
+          aws ec2 run-instances \
+            --region {{ region }} \
+            --instance-type {{ instance_type }} \
+            --image-id {{ ami_id }} \
+            --key-name {{ key_name }} \
+            --security-group-ids {{ security_group }} \
+            --subnet-id {{ subnet_id }} \
+            --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value={{ tag_name }}}]' \
+            --query 'Instances[0].InstanceId' \
+            --output text
+        register: ec2_instance_id
  
     - name: Output EC2 instance ID
       debug:
