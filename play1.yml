@@ -1,6 +1,6 @@
 ---
 - name: Provision an EC2 instance in AWS
-  hosts: localhost
+  hosts: all
   gather_facts: false
   vars:
     instance_type: t2.micro
