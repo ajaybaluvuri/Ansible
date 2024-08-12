@@ -14,7 +14,7 @@
  
   tasks:
     - name: Run AWS CLI command to create EC2 instance
-      shell: |
+      ansible.builtin.shell: |
         aws ec2 run-instances \
           --region {{ region }} \
           --instance-type {{ instance_type }} \
