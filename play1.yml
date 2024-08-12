@@ -1,6 +1,6 @@
 ---
 - name: Provision an EC2 instance in AWS
-  hosts: all
+  hosts: localhost
   become: yes
   gather_facts: yes
   vars:
