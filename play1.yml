@@ -14,7 +14,7 @@
  
   tasks:
     - name: Launch EC2 Instance
-       amazon.aws.ec2_instance:
+       ec2:
         key_name: "{{ key_name }}"
         instance_type: "{{ instance_type }}"
         image: "{{ ami }}"
