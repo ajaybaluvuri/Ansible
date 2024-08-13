@@ -7,7 +7,7 @@
     region: "us-east-1"
     instance_type: "t2.micro"
     ami_id: "ami-04a81a99f5ec58529"
-    key_name: "Aws_lab"
+    key_name: "Awx_lab.pem"
     security_group: "sg-09656da5cdd3a0b7b"
     subnet_id: "subnet-03b85d94de5e2b99c"
     tag_name: "Ansible_AWX_EC2"
