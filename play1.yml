@@ -28,6 +28,7 @@
             cidr_ip: 0.0.0.0/0
         state: present
       register: security_group_result
+      ignore_errors: yes
  
     - name: Debug security group creation result
       debug:
