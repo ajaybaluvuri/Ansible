@@ -21,12 +21,8 @@
          - proto: tcp
            ports:
             - 80
-          cidr_ip: 0.0.0.0/0
-          rule_desc: allow all on port 80
- 
-    - name: Debug security group creation result
-      debug:
-        var: security_group_result
+           cidr_ip: 0.0.0.0/0
+           rule_desc: allow all on port 80
  
     - name: Launch EC2 instance
       amazon.aws.ec2_instance:
