@@ -2,6 +2,7 @@
 - name: Provision an EC2 instance
   hosts: localhost
   become: yes
+  become_user: root
   gather_facts: no
   collections: amazon.aws
   vars:
