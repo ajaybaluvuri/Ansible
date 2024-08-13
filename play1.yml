@@ -2,6 +2,7 @@
 - name: Create EC2 instance using AWS CLI
   hosts: localhost
   become: yes
+  become_user: root
   gather_facts: yes
   vars:
     region: "us-east-1"
