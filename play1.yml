@@ -2,6 +2,8 @@
 - name: Provision an EC2 instance
   hosts: localhost
   become: yes
+  become_method: sudo
+  become_user: root
   gather_facts: no
   vars:
     aws_region: ap-east-1
