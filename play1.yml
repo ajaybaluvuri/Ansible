@@ -11,12 +11,40 @@
     security_group: launch-wizard-3
     subnet_id: subnet-03b85d94de5e2b99c
   tasks:
-   - name: Install EC2 Instance using Shell
-     ansible.builtin.shell: >
-       aws ec2 run-instances \
-       --image-id ami-04a81a99f5ec58529 \
-       --count 1 \
-       --instance-type t2.micro \
-       --key-name Awx_lab \
-       --subnet-id subnet-03b85d94de5e2b99c \
-       --security-group-ids sg-060a4fbcb6c4f5399
+    - name: Create a security group
+      amazon.aws.ec2_security_group:
+        name: "{{ security_group }}"
+        description: "Security group for EC2 instance"
+        region: "{{ aws_region }}"
+        rules:
+          - proto: tcp
+            from_port: 22
+            to_port: 22
+            cidr_ip: 0.0.0.0/0
+        rules_egress:
+          - proto: -1
+            from_port: -1
+            to_port: -1
+            cidr_ip: 0.0.0.0/0
+        state: present
+      register: security_group_result
+ 
+    - name: Debug security group creation result
+      debug:
+        var: security_group_result
+ 
+    - name: Launch EC2 instance
+      amazon.aws.ec2_instance:
+        name: AWX-VM-1
+        key_name: "{{ key_name }}"
+        instance_type: "{{ instance_type }}"
+        image_id: "{{ image_id }}"
+        region: "{{ aws_region }}"
+        vpc_subnet_id: "{{ subnet_id }}"
+        security_group: "{{ security_group }}"
+        wait: yes
+      register: ec2
+ 
+    - name: Debug EC2 launch result
+      debug:
+        var: ec2
