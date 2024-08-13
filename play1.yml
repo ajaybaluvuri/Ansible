@@ -8,7 +8,7 @@
     key_name: Awx_lab
     instance_type: t2.micro
     image_id: ami-04a81a99f5ec58529
-    security_group: launch-wizard-5
+    security_group: launch-wizard-3
     subnet_id: subnet-03b85d94de5e2b99c
   tasks:
     - name: Create a security group
