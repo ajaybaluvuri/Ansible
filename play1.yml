@@ -1,34 +1,57 @@
 ---
-- name: Create EC2 instance using AWS CLI
+- name: Provision an EC2 instance
   hosts: localhost
   become: yes
-  become_user: root
-  connection: local
-  gather_facts: yes
+  gather_facts: no
   vars:
-    region: "us-east-1"
-    instance_type: "t2.micro"
-    ami_id: "ami-04a81a99f5ec58529"
-    key_name: "Awx_lab.pem"
-    security_group: "sg-09656da5cdd3a0b7b"
-    subnet_id: "subnet-03b85d94de5e2b99c"
-    tag_name: "Ansible_AWX_EC2"
- 
+    aws_region: ap-east-1
+    key_name: Awx_lab
+    instance_type: t2.micro
+    image_id: ami-04a81a99f5ec58529
+    security_group: launch-wizard-5
+    subnet_id: subnet-03b85d94de5e2b99c
   tasks:
-    - name: Run AWS CLI command to create EC2 instance
-      ansible.builtin.shell: >
-        aws ec2 run-instances \
-        --region {{ region }} \
-        --instance-type {{ instance_type }} \
-        --image-id {{ ami_id }} \
-        --key-name {{ key_name }} \
-        --security-group-ids {{ security_group }} \
-        --subnet-id {{ subnet_id }} \
-        --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value={{ tag_name }}}]' \
-        --query 'Instances[0].InstanceId' \
-        --output text
-      register: ec2_instance_id
+    - name: Create a security group
+      amazon.aws.ec2_group:
+        name: "{{ security_group }}"
+        description: "Security group for EC2 instance"
+        region: "{{ aws_region }}"
+        rules:
+          - proto: tcp
+            from_port: 22
+            to_port: 22
+            cidr_ip: 0.0.0.0/0
+        rules_egress:
+          - proto: -1
+            from_port: -1
+            to_port: -1
+            cidr_ip: 0.0.0.0/0
+        state: present
+      register: security_group_result
  
-    - name: Output EC2 instance ID
-      ansible.builtin.debug:
-        var: ec2_instance_id
+    - name: Debug security group creation result
+      debug:
+        var: security_group_result
+ 
+    - name: Launch EC2 instance
+      amazon.aws.ec2_instance:
+        name: TestingVMM
+        key_name: "{{ key_name }}"
+        instance_type: "{{ instance_type }}"
+        image_id: "{{ image_id }}"
+        region: "{{ aws_region }}"
+        vpc_subnet_id: "{{ subnet_id }}"
+        security_group: "{{ security_group }}"
+        wait: yes
+      register: ec2
+ 
+    - name: Debug EC2 launch result
+      debug:
+        var: ec2
+ 
+    - name: Output instance details
+      debug:
+        msg: |
+          EC2 instance created:
+          - Instance ID: {{ ec2.instances[0].id }}
+          - Public IP: {{ ec2.instances[0].public_ip }}
