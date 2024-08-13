@@ -2,48 +2,21 @@
 - name: Provision an EC2 instance
   hosts: localhost
   become: yes
-  become_method: sudo
   gather_facts: no
-  collections: amazon.aws
   vars:
-    aws_region: us-east-1
+    aws_region: ap-east-1
     key_name: Awx_lab
     instance_type: t2.micro
     image_id: ami-04a81a99f5ec58529
     security_group: launch-wizard-3
     subnet_id: subnet-03b85d94de5e2b99c
   tasks:
-    - name: example using security group rule descriptions
-      amazon.aws.ec2_security_group:
-        name: "{{ security_group }}"
-        description: sg with rule descriptions
-        vpc_id: vpc-00fe8c9e4a4209844
-        rules:
-         - proto: tcp
-           ports:
-            - 80
-           cidr_ip: 0.0.0.0/0
-           rule_desc: allow all on port 80
- 
-    - name: Launch EC2 instance
-      amazon.aws.ec2_instance:
-        name: TestingVMM
-        key_name: "{{ key_name }}"
-        instance_type: "{{ instance_type }}"
-        image_id: "{{ image_id }}"
-        region: "{{ aws_region }}"
-        vpc_subnet_id: "{{ subnet_id }}"
-        security_group: "{{ security_group }}"
-        wait: yes
-      register: ec2
- 
-    - name: Debug EC2 launch result
-      debug:
-        var: ec2
- 
-    - name: Output instance details
-      debug:
-        msg: |
-          EC2 instance created:
-          - Instance ID: {{ ec2.instances[0].id }}
-          - Public IP: {{ ec2.instances[0].public_ip }}
+   - name: Install EC2 Instance using Shell
+     ansible.builtin.shell: >
+       aws ec2 run-instances \
+       --image-id ami-04a81a99f5ec58529 \
+       --count 1 \
+       --instance-type t2.micro \
+       --key-name Awx_lab \
+       --subnet-id subnet-03b85d94de5e2b99c \
+       --security-group-ids sg-060a4fbcb6c4f5399
