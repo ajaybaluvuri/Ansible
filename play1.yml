@@ -12,23 +12,17 @@
     security_group: launch-wizard-3
     subnet_id: subnet-03b85d94de5e2b99c
   tasks:
-    - name: Create a security group
-      amazon.aws.ec2_group:
+    - name: example using security group rule descriptions
+      amazon.aws.ec2_security_group:
         name: "{{ security_group }}"
-        description: "Security group for EC2 instance"
-        region: "{{ aws_region }}"
+        description: sg with rule descriptions
+        vpc_id: vpc-00fe8c9e4a4209844
         rules:
-          - proto: tcp
-            from_port: 22
-            to_port: 22
-            cidr_ip: 0.0.0.0/0
-        rules_egress:
-          - proto: -1
-            from_port: -1
-            to_port: -1
-            cidr_ip: 0.0.0.0/0
-        state: present
-      register: security_group_result
+         - proto: tcp
+             ports:
+              - 80
+          cidr_ip: 0.0.0.0/0
+          rule_desc: allow all on port 80
  
     - name: Debug security group creation result
       debug:
