@@ -2,7 +2,7 @@
 - name: Provision an EC2 instance
   hosts: localhost
   become: yes
-  gather_fact: no
+  gather_facts: no
   collections: amazon.aws
   vars:
     aws_region: ap-east-1
