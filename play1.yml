@@ -10,8 +10,8 @@
     image_id: ami-04a81a99f5ec58529
     security_group: launch-wizard-3
     subnet_id: subnet-03b85d94de5e2b99c
-    Access_Key: "{{ aws_access_key }}"
-    Secret_Key: "{{ aws_secret_key }}"
+    Access_Key: "{{ AccessKey }}"
+    Secret_Key: "{{ SecretKey }}"
   tasks:
     - name: Create a security group
       amazon.aws.ec2_security_group:
